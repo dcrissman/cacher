@@ -13,24 +13,26 @@ import cacher.Cache;
  */
 public class ExceptionThrowingCache implements Cache {
 
+	private static final String ERROR = "Caching not supported.";
+
 	@Override
 	public Object get(String key) {
-		throw new RuntimeException("Caching not supported.");
+		throw new RuntimeException(ERROR);
 	}
 
 	@Override
 	public void set(String key, Object value) {
-		throw new RuntimeException("Caching not supported.");
+		throw new RuntimeException(ERROR);
 	}
 
 	@Override
 	public void clear() {
-		throw new RuntimeException("Caching not supported.");
+		throw new RuntimeException(ERROR);
 	}
 
 	@Override
 	public Map<String, Object> getBulk(List<String> keys) {
-		throw new RuntimeException("Caching not supported.");
+		throw new RuntimeException(ERROR);
 	}
 
 }

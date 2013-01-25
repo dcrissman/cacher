@@ -18,24 +18,24 @@ public class InMemoryCache extends HashMap<String, Object> implements Cache {
 
 	private static final long serialVersionUID = -295001316058726007L;
 
-	private final static Logger logger = LoggerFactory.getLogger(InMemoryCache.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryCache.class);
 
 	@Override
 	public Object get(String key) {
 		Object value = super.get(key);
-		logger.info("get: " + key + ", return value = " + ((value == null) ? "null" : value.toString()));
+		LOGGER.info("get: " + key + ", return value = " + ((value == null) ? "null" : value.toString()));
 		return value;
 	}
 
 	@Override
 	public void set(String key, Object value) {
-		logger.info("set: " + key + ", " + ((value == null) ? "null" : value.toString()));
+		LOGGER.info("set: " + key + ", " + ((value == null) ? "null" : value.toString()));
 		super.put(key, value);
 	}
 
 	@Override
 	public void clear() {
-		logger.debug("clear");
+		LOGGER.debug("clear");
 		super.clear();
 	}
 
@@ -43,13 +43,13 @@ public class InMemoryCache extends HashMap<String, Object> implements Cache {
 	public Map<String, Object> getBulk(List<String> keys) {
 		Map<String, Object> values = new HashMap<String, Object>();
 
-		logger.info("getBulk requested: " + keys);
+		LOGGER.info("getBulk requested: " + keys);
 
 		for(String key : keys){
 			values.put(key, super.get(key));
 		}
 
-		logger.info("getBulk: " + values);
+		LOGGER.info("getBulk: " + values);
 
 		return values;
 	}

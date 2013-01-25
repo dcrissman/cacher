@@ -35,7 +35,7 @@ public class CacheInterceptor implements MethodInterceptor{
 
 	@Inject
 	public CacheInterceptor(FetchManager fetchManger){
-		setFetchManager(fetchManger);
+		this.fetchManager = fetchManger;
 	}
 
 	@Inject
@@ -48,7 +48,7 @@ public class CacheInterceptor implements MethodInterceptor{
 	}
 
 	@Override
-	public Object invoke(MethodInvocation invocation) throws Throwable {
+	public Object invoke(MethodInvocation invocation) throws Throwable { //NOSONAR
 		if(getFetchManager() == null){
 			throw new IllegalStateException("A FetchManager instance must set.");
 		}
@@ -88,7 +88,7 @@ public class CacheInterceptor implements MethodInterceptor{
 		public Object fetch(String key) {
 			try {
 				return invocation.proceed();
-			} catch (Throwable e) {
+			} catch (Throwable e) { //NOSONAR
 				String methodName = invocation.getMethod().toString();
 				throw new RuntimeException("Unable to fetch key for method " + methodName + ": " + key, e);
 			}
@@ -135,7 +135,7 @@ public class CacheInterceptor implements MethodInterceptor{
 					throw new IllegalArgumentException("Wrapped method must return a Map<String, Object>: " + methodName);
 				}
 
-			} catch (Throwable e) {
+			} catch (Throwable e) { //NOSONAR
 				String methodName = invocation.getMethod().toString();
 				throw new RuntimeException("Unable to fetch keys for method " + methodName + ": " + keys, e);
 			}

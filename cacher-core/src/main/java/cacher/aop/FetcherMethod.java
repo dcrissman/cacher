@@ -6,9 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import cacher.Cache;
-import cacher.fetcher.FetchManager;
-
 /**
  * <p>The annotated method will be intercepted by the {@link CacheInterceptor} and the returned value(s) will be
  * cached. Or in the case that all values are already cached, the {@link FetcherMethod} will never actually be called.</p>
@@ -42,14 +39,14 @@ public @interface FetcherMethod {
 	 * This really comes down to a matter of preference.</p>
 	 * <p>FOR EXAMPLE:<br>
 	 * * For a given key '123', if a prefix is provided the key used in the cacher will be 'prefix123', but the value
-	 * returned by the {@link FetchManager} will be '123'.<br>
+	 * returned by the {@link cacher.fetcher.FetchManager} will be '123'.<br>
 	 * * If a prefix is not included but rather build into the {@link KeyGenerator}, then the key 'prefix123' will
-	 * be used for caching, but also returned from the {@link FetchManager}.</p>
+	 * be used for caching, but also returned from the {@link cacher.fetcher.FetchManager}.</p>
 	 */
 	String prefix() default "";
 
 	/**
-	 * {@link KeyGenerator} is used to generate the keys used by the {@link Cache}.
+	 * {@link KeyGenerator} is used to generate the keys used by the {@link cacher.Cache}.
 	 */
 	Class<? extends KeyGenerator> keyGenerator();
 
@@ -62,7 +59,7 @@ public @interface FetcherMethod {
 
 	/**
 	 * <p>An implementation of {@link KeyCleaner} is required only for bulk fetches, in order to
-	 * remove keys that were already fetched from the {@link Cache}.</p>
+	 * remove keys that were already fetched from the {@link cacher.Cache}.</p>
 	 * <p><b>NOTE:</b> Required and used only for bulk fetches.</p>
 	 */
 	Class<? extends KeyCleaner> keyCleaner() default UnsupportedKeyCleaner.class;
