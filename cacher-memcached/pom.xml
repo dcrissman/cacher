@@ -10,6 +10,7 @@
 	</parent>
 
 	<artifactId>cacher-memcached</artifactId>
+	<name>${project.artifactId}</name>
 
 	<repositories>
 		<repository>

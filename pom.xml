@@ -6,6 +6,8 @@
 	<artifactId>cacher</artifactId>
 	<version>1.0.3</version>
 	<packaging>pom</packaging>
+	
+	<name>${project.artifactId}</name>
 
 	<properties>
 		<!-- Dependencies -->
