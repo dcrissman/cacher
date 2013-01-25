@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>cacher</groupId>
+		<artifactId>cacher</artifactId>
+		<version>1.0.2</version>
+	</parent>
+
+	<artifactId>cacher-memcached</artifactId>
+
+	<repositories>
+		<repository>
+			<id>spy</id>
+			<name>Spy Repository</name>
+			<layout>default</layout>
+			<url>http://files.couchbase.com/maven2/</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<spymemcached.version>2.8.4</spymemcached.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>cacher</groupId>
+			<artifactId>cacher-core</artifactId>
+		</dependency>
+	
+		<dependency>
+			<groupId>spy</groupId>
+			<artifactId>spymemcached</artifactId>
+			<version>${spymemcached.version}</version>
+		</dependency>
+	</dependencies>
+
+</project>
