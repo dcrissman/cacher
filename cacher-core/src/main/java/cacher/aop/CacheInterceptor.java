@@ -10,6 +10,8 @@ import javax.inject.Inject;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cacher.fetcher.FetchManager;
 import cacher.fetcher.FetchMultiple;
@@ -28,6 +30,8 @@ import cacher.fetcher.FetchSingle;
  * @see FetcherMethod
  */
 public class CacheInterceptor implements MethodInterceptor{
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(CacheInterceptor.class);
 
 	private FetchManager fetchManager;
 
@@ -60,19 +64,31 @@ public class CacheInterceptor implements MethodInterceptor{
 					"Unable to intercept a method without the FetcherMethod annotation: " + method.getName());
 		}
 
-		KeyGenerator keyGenerator = cacheAnnotation.keyGenerator().newInstance();
+		try{
+			KeyGenerator keyGenerator = cacheAnnotation.keyGenerator().newInstance();
 
-		if(cacheAnnotation.fetchBulk()){
-			return getFetchManager().fetchMultiple(
-					cacheAnnotation.prefix(),
-					keyGenerator.generateKeys(invocation.getArguments()),
-					new MultipleFetcher(invocation, cacheAnnotation.keyCleaner().newInstance()));
+			if(cacheAnnotation.fetchBulk()){
+				return getFetchManager().fetchMultiple(
+						cacheAnnotation.prefix(),
+						keyGenerator.generateKeys(invocation.getArguments()),
+						new MultipleFetcher(invocation, cacheAnnotation.keyCleaner().newInstance()));
+			}
+			else{
+				return getFetchManager().fetchSingle(
+						cacheAnnotation.prefix(),
+						keyGenerator.generateKey(invocation.getArguments()),
+						new SingleFetcher(invocation));
+			}
 		}
-		else{
-			return getFetchManager().fetchSingle(
-					cacheAnnotation.prefix(),
-					keyGenerator.generateKey(invocation.getArguments()),
-					new SingleFetcher(invocation));
+		//TODO catch exceptions thrown from method invocation, as invoking again could be problematic.
+		catch(Exception e){
+			/*
+			 * General catch all in case something unexpected happens, this will ensure that the
+			 * FetcherMethod is still invoked.
+			 */
+			LOGGER.info("An unexpected exception was thrown while attempting to cache '" + method.getName()
+					+ "'. Method will now be invoked without caching enabled.", e);
+			return invocation.proceed();
 		}
 	}
 
