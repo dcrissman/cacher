@@ -117,7 +117,7 @@ public class FetchManager {
 		catch(ClassCastException e){ //NOSONAR
 			throw e;
 		}
-		catch(RuntimeException e){ //Likely a CacheResult issue.
+		catch(RuntimeException e){ //Likely a Cache issue.
 			LOGGER.error("Unable to fetch from cacher - Group: '"
 					+ (group == null ? "" : group)
 					+ "' Keys: " + keys, e);
@@ -231,11 +231,16 @@ public class FetchManager {
 	 * @param keys - Keys fetched from the cacher.
 	 */
 	private void fireFetchedFromCacheEvent(List<String> keys){
-		if(keys == null || keys.isEmpty()){
-			return;
+		try{
+			if(keys == null || keys.isEmpty()){
+				return;
+			}
+			for(FetchEventListener listener : fetchEventListeners){
+				listener.fetchedFromCache(keys);
+			}
 		}
-		for(FetchEventListener listener : fetchEventListeners){
-			listener.fetchedFromCache(keys);
+		catch(Exception e){
+			LOGGER.error("Exception occurred while handling a 'fetchedFromCache' event", e);
 		}
 	}
 
@@ -244,11 +249,16 @@ public class FetchManager {
 	 * @param keys - Keys fetched from the fetcher.
 	 */
 	private void fireFetchedFromFetcherEvent(List<String> keys){
-		if(keys == null || keys.isEmpty()){
-			return;
+		try{
+			if(keys == null || keys.isEmpty()){
+				return;
+			}
+			for(FetchEventListener listener : fetchEventListeners){
+				listener.fetchedFromFetcher(keys);
+			}
 		}
-		for(FetchEventListener listener : fetchEventListeners){
-			listener.fetchedFromFetcher(keys);
+		catch(Exception e){
+			LOGGER.error("Exception occurred while handling a 'fetchedFromFetcher' event", e);
 		}
 	}
 
