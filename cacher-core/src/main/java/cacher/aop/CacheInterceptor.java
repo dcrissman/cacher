@@ -65,18 +65,18 @@ public class CacheInterceptor implements MethodInterceptor{
 
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable { //NOSONAR
-		if(getFetchManager() == null){
-			throw new IllegalStateException("A FetchManager instance must set.");
-		}
-
-		Method method = invocation.getMethod();
-		FetcherMethod cacheAnnotation = method.getAnnotation(FetcherMethod.class);
-		if(cacheAnnotation == null){
-			throw new IllegalArgumentException(
-					"Unable to intercept a method without the FetcherMethod annotation: " + method.getName());
-		}
-
 		try{
+			if(getFetchManager() == null){
+				throw new IllegalStateException("A FetchManager instance must set.");
+			}
+
+			Method method = invocation.getMethod();
+			FetcherMethod cacheAnnotation = method.getAnnotation(FetcherMethod.class);
+			if(cacheAnnotation == null){
+				throw new IllegalStateException(
+						"Unable to intercept a method without the FetcherMethod annotation: " + method.getName());
+			}
+
 			KeyGenerator keyGenerator = cacheAnnotation.keyGenerator().newInstance();
 
 			if(cacheAnnotation.fetchBulk()){
@@ -92,18 +92,26 @@ public class CacheInterceptor implements MethodInterceptor{
 						new SingleFetcher(invocation));
 			}
 		}
-		//TODO catch exceptions thrown from method invocation, as invoking again could be problematic.
+		catch(AopFetcherInvocationException e){
+			LOGGER.info("Fetcher threw an Exception that should be handled by client code", e);
+			throw e.getCause();
+		}
 		catch(Exception e){
 			/*
 			 * General catch all in case something unexpected happens, this will ensure that the
 			 * FetcherMethod is still invoked.
 			 */
-			LOGGER.info("An unexpected exception was thrown while attempting to cache '" + method.getName()
+			LOGGER.info("An unexpected exception was thrown while attempting to cache '" + invocation.getMethod().getName()
 					+ "'. Method will now be invoked without caching enabled.", e);
 			return invocation.proceed();
 		}
 	}
 
+	/**
+	 * {@link FetchSingle} implementation used to wrap single result {@link FetcherMethod}s.
+	 * 
+	 * @author Dennis Crissman
+	 */
 	private class SingleFetcher implements FetchSingle<Object>{
 
 		private final MethodInvocation invocation;
@@ -116,9 +124,10 @@ public class CacheInterceptor implements MethodInterceptor{
 		public Object fetch(String key) {
 			try {
 				return invocation.proceed();
-			} catch (Throwable e) { //NOSONAR
-				String methodName = invocation.getMethod().toString();
-				throw new RuntimeException("Unable to fetch key for method " + methodName + ": " + key, e);
+			}
+			catch (Throwable e) { //NOSONAR
+				throw new AopFetcherInvocationException(
+						"Unable to fetch key for method " + invocation.getMethod().toString() + ": " + key, e);
 			}
 		}
 
@@ -130,6 +139,11 @@ public class CacheInterceptor implements MethodInterceptor{
 
 	}
 
+	/**
+	 * {@link FetchMultiple} implementation used to wrap a bulk {@link FetcherMethod}s.
+	 * 
+	 * @author Dennis Crissman
+	 */
 	private class MultipleFetcher implements FetchMultiple<Object>{
 
 		private final MethodInvocation invocation;
@@ -145,7 +159,14 @@ public class CacheInterceptor implements MethodInterceptor{
 			try {
 				cleaner.clean(invocation.getArguments(), keys);
 
-				Object obj = invocation.proceed();
+				Object obj;
+				try{
+					obj = invocation.proceed();
+				}
+				catch(Throwable e){ //NOSONA
+					throw new AopFetcherInvocationException(
+							"Unable to fetch keys for method " + invocation.getMethod().toString() + ": " + keys, e);
+				}
 
 				if(obj instanceof Map){
 					Map<String, Object> results = new HashMap<String, Object>();
@@ -159,19 +180,73 @@ public class CacheInterceptor implements MethodInterceptor{
 					return results;
 				}
 				else{
-					String methodName = invocation.getMethod().toString();
-					throw new IllegalArgumentException("Wrapped method must return a Map<String, Object>: " + methodName);
+					throw new InvalidBulkReturnTypeException("Wrapped method must return a Map<String, Object>: "
+							+ invocation.getMethod().toString());
 				}
 
-			} catch (Throwable e) { //NOSONAR
-				String methodName = invocation.getMethod().toString();
-				throw new RuntimeException("Unable to fetch keys for method " + methodName + ": " + keys, e);
+			}
+			catch(AopFetcherInvocationException e){ //NOSONAR
+				throw e;
+			}
+			catch (Exception e) {
+				throw new CacheInterceptorException(
+						"Unable to fetch keys for method " + invocation.getMethod().toString() + ": " + keys, e);
 			}
 		}
 
 		@Override
 		public Class<Object> getType() {
 			return Object.class;
+		}
+
+	}
+
+	/**
+	 * <p>Exception that is thrown when the {@link FetcherMethod} throws an {@link Exception} of it's own.</p>
+	 * <p>This helps ensure that the Fetcher will not be executed a second time.</p>
+	 * 
+	 * @author Dennis Crissman
+	 */
+	private class AopFetcherInvocationException extends RuntimeException{
+
+		private static final long serialVersionUID = -7822168108464126289L;
+
+		public AopFetcherInvocationException(String message, Throwable cause) {
+			super(message, cause);
+		}
+
+	}
+
+	/**
+	 * General purpose {@link CacheInterceptor} exception.
+	 * 
+	 * @author Dennis Crissman
+	 */
+	public class CacheInterceptorException extends RuntimeException{
+
+		private static final long serialVersionUID = -2880937590798593384L;
+
+		public CacheInterceptorException(String message, Throwable cause) {
+			super(message, cause);
+		}
+
+		public CacheInterceptorException(String message) {
+			super(message);
+		}
+
+	}
+
+	/**
+	 * Thrown for Bulk Fetches when the {@link FetcherMethod} returns an invalid type.
+	 * 
+	 * @author Dennis Crissman
+	 */
+	public class InvalidBulkReturnTypeException extends CacheInterceptorException{
+
+		private static final long serialVersionUID = -4638802706989516499L;
+
+		public InvalidBulkReturnTypeException(String message) {
+			super(message);
 		}
 
 	}
