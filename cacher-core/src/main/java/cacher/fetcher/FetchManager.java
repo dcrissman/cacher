@@ -117,7 +117,11 @@ public class FetchManager {
 		catch(ClassCastException e){ //NOSONAR
 			throw e;
 		}
-		catch(RuntimeException e){ //Likely a CacheResult issue.
+		catch(RuntimeException e){
+			/*
+			 * Results cannot be trusted, clear any retrieved values and ask the
+			 * Fetcher for everything.
+			 */
 			LOGGER.error("Unable to fetch from cacher - Group: '"
 					+ (group == null ? "" : group)
 					+ "' Keys: " + keys, e);
@@ -126,6 +130,10 @@ public class FetchManager {
 			uncachedObjects.addAll(keys);
 		}
 
+		/*
+		 * Any exception generated from this block is from the Fetcher
+		 * and should be allowed to bubble up to application code.
+		 */
 		if(!uncachedObjects.isEmpty()) {
 			Map<String, T> missingObjects = fetcher.fetch(uncachedObjects);
 			for(Entry<String, T> entry : missingObjects.entrySet()){
@@ -188,6 +196,10 @@ public class FetchManager {
 		List<String> keys = new ArrayList<String>();
 		keys.add(key);
 		if(cachedObj == null){
+			/*
+			 * Any exception generated from this block is from the Fetcher
+			 * and should be allowed to bubble up to application code.
+			 */
 			T obj = fetcher.fetch(key);
 			addToCache(prefixedKey(group, key), obj);
 			fireFetchedFromFetcherEvent(keys);
@@ -231,11 +243,17 @@ public class FetchManager {
 	 * @param keys - Keys fetched from the cacher.
 	 */
 	private void fireFetchedFromCacheEvent(List<String> keys){
-		if(keys == null || keys.isEmpty()){
+		if((keys == null) || keys.isEmpty() || (fetchEventListeners == null)){
 			return;
 		}
+
 		for(FetchEventListener listener : fetchEventListeners){
-			listener.fetchedFromCache(keys);
+			try{
+				listener.fetchedFromCache(keys);
+			}
+			catch(Exception e){
+				LOGGER.error("Exception occurred while handling a 'fetchedFromCache' event", e);
+			}
 		}
 	}
 
@@ -244,12 +262,19 @@ public class FetchManager {
 	 * @param keys - Keys fetched from the fetcher.
 	 */
 	private void fireFetchedFromFetcherEvent(List<String> keys){
-		if(keys == null || keys.isEmpty()){
+		if((keys == null) || keys.isEmpty() || (fetchEventListeners == null)){
 			return;
 		}
+
 		for(FetchEventListener listener : fetchEventListeners){
-			listener.fetchedFromFetcher(keys);
+			try{
+				listener.fetchedFromFetcher(keys);
+			}
+			catch(Exception e){
+				LOGGER.error("Exception occurred while handling a 'fetchedFromFetcher' event", e);
+			}
 		}
+
 	}
 
 }
