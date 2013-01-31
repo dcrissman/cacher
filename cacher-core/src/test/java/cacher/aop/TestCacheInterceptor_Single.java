@@ -105,6 +105,11 @@ public class TestCacheInterceptor_Single implements Module{
 		assertEquals(cachedColor, cache.get(TestHelper.PREFIX + FakeKeyGenerator.SINGLE_KEY));
 	}
 
+	@Test(expected=FakeRuntimeException.class)
+	public void testFetcherMethodThrowsException(){
+		helper.throwException();
+	}
+
 	public static class TestHelper{
 
 		public final static String COLOR = "purple";
@@ -118,6 +123,11 @@ public class TestCacheInterceptor_Single implements Module{
 		@FetcherMethod(keyGenerator=FakeKeyGenerator.class, prefix=PREFIX)
 		public String getColor2(){
 			return COLOR;
+		}
+
+		@FetcherMethod(keyGenerator=FakeKeyGenerator.class)
+		public String throwException(){
+			throw new FakeRuntimeException("FAKE EXCEPTION");
 		}
 
 	}
@@ -134,6 +144,16 @@ public class TestCacheInterceptor_Single implements Module{
 		@Override
 		public List<String> generateKeys(Object[] arguments) {
 			throw new UnsupportedOperationException("This method should not be being called.");
+		}
+
+	}
+
+	public static class FakeRuntimeException extends RuntimeException{
+
+		private static final long serialVersionUID = -4796092545993257202L;
+
+		public FakeRuntimeException(String message){
+			super(message);
 		}
 
 	}

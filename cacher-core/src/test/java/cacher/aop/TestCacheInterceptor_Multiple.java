@@ -127,6 +127,11 @@ public class TestCacheInterceptor_Multiple implements Module{
 		assertEquals(2, cache.size());
 	}
 
+	@Test(expected=FakeRuntimeException.class)
+	public void testFetcherMethodThrowsException(){
+		helper.throwException();
+	}
+
 	public static class TestHelper{
 
 		public final static String KEY_BLUE = "color-blue";
@@ -148,6 +153,11 @@ public class TestCacheInterceptor_Multiple implements Module{
 		@FetcherMethod(keyGenerator=FakeKeyGenerator.class, prefix=PREFIX, fetchBulk=true, keyCleaner=FakeKeyCleaner.class)
 		public Map<String, Object> getColors2(String... keys){
 			return convert(keys);
+		}
+
+		@FetcherMethod(keyGenerator=FakeKeyGenerator.class, fetchBulk=true, keyCleaner=FakeKeyCleaner.class)
+		public String throwException(){
+			throw new FakeRuntimeException("FAKE EXCEPTION");
 		}
 
 		private Map<String, Object> convert(String[] keys){
@@ -184,6 +194,16 @@ public class TestCacheInterceptor_Multiple implements Module{
 		@Override
 		public void clean(final Object[] arguments, final List<String> uncachedKeys) {
 			arguments[0] = uncachedKeys.toArray(new String[0]);
+		}
+
+	}
+
+	public static class FakeRuntimeException extends RuntimeException{
+
+		private static final long serialVersionUID = -4796092545993257202L;
+
+		public FakeRuntimeException(String message){
+			super(message);
 		}
 
 	}

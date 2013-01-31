@@ -93,7 +93,7 @@ public class CacheInterceptor implements MethodInterceptor{
 			}
 		}
 		catch(AopFetcherInvocationException e){
-			LOGGER.info("Fetcher threw an Exception that should be handled by client code", e);
+			LOGGER.info("Fetcher threw an Exception that should be handled by client code, see following stacktrace:", e);
 			throw e.getCause();
 		}
 		catch(Exception e){
