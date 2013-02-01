@@ -105,6 +105,9 @@ public class TestCacheInterceptor_Single implements Module{
 		assertEquals(cachedColor, cache.get(TestHelper.PREFIX + FakeKeyGenerator.SINGLE_KEY));
 	}
 
+	/**
+	 * If a Fetcher throws an {@link Exception}, it should bubble up unaltered to the application.
+	 */
 	@Test(expected=FakeRuntimeException.class)
 	public void testFetcherMethodThrowsException(){
 		helper.throwException();

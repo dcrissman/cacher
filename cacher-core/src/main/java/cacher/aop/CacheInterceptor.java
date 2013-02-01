@@ -112,7 +112,7 @@ public class CacheInterceptor implements MethodInterceptor{
 	 * 
 	 * @author Dennis Crissman
 	 */
-	private class SingleFetcher implements FetchSingle<Object>{
+	private static class SingleFetcher implements FetchSingle<Object>{
 
 		private final MethodInvocation invocation;
 
@@ -144,7 +144,7 @@ public class CacheInterceptor implements MethodInterceptor{
 	 * 
 	 * @author Dennis Crissman
 	 */
-	private class MultipleFetcher implements FetchMultiple<Object>{
+	private static class MultipleFetcher implements FetchMultiple<Object>{
 
 		private final MethodInvocation invocation;
 		private final KeyCleaner cleaner;
@@ -163,7 +163,7 @@ public class CacheInterceptor implements MethodInterceptor{
 				try{
 					obj = invocation.proceed();
 				}
-				catch(Throwable e){ //NOSONA
+				catch(Throwable e){ //NOSONAR
 					throw new AopFetcherInvocationException(
 							"Unable to fetch keys for method " + invocation.getMethod().toString() + ": " + keys, e);
 				}
@@ -180,7 +180,7 @@ public class CacheInterceptor implements MethodInterceptor{
 					return results;
 				}
 				else{
-					throw new InvalidBulkReturnTypeException("Wrapped method must return a Map<String, Object>: "
+					throw new InvalidBulkReturnTypeException("@FetcherMethod must return a Map<String, Object> in order to utilize Caching: "
 							+ invocation.getMethod().toString());
 				}
 
@@ -207,7 +207,7 @@ public class CacheInterceptor implements MethodInterceptor{
 	 * 
 	 * @author Dennis Crissman
 	 */
-	private class AopFetcherInvocationException extends RuntimeException{
+	private static class AopFetcherInvocationException extends RuntimeException{
 
 		private static final long serialVersionUID = -7822168108464126289L;
 
@@ -222,16 +222,12 @@ public class CacheInterceptor implements MethodInterceptor{
 	 * 
 	 * @author Dennis Crissman
 	 */
-	public class CacheInterceptorException extends RuntimeException{
+	public static class CacheInterceptorException extends RuntimeException{
 
 		private static final long serialVersionUID = -2880937590798593384L;
 
 		public CacheInterceptorException(String message, Throwable cause) {
 			super(message, cause);
-		}
-
-		public CacheInterceptorException(String message) {
-			super(message);
 		}
 
 	}
@@ -241,7 +237,7 @@ public class CacheInterceptor implements MethodInterceptor{
 	 * 
 	 * @author Dennis Crissman
 	 */
-	public class InvalidBulkReturnTypeException extends CacheInterceptorException{
+	private static class InvalidBulkReturnTypeException extends RuntimeException{
 
 		private static final long serialVersionUID = -4638802706989516499L;
 

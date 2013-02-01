@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
 import testframework.util.GuiceRunner;
 import testframework.util.GuiceRunner.UseModules;
 import cacher.fetcher.FetchManager;
+import cacher.fetcher.FetchMultiple;
 import cacher.impl.InMemoryCache;
 
 import com.google.inject.Binder;
@@ -127,9 +128,43 @@ public class TestCacheInterceptor_Multiple implements Module{
 		assertEquals(2, cache.size());
 	}
 
+	/**
+	 * If a Fetcher throws an {@link Exception}, it should bubble up unaltered to the application.
+	 */
 	@Test(expected=FakeRuntimeException.class)
 	public void testFetcherMethodThrowsException(){
-		helper.throwException();
+		helper.throwException("FAKEKEY");
+	}
+
+	/**
+	 * If a bulk {@link FetcherMethod} returns an invalid type, then caching should be
+	 * disabled and the {@link FetchMultiple} should be called directly.
+	 */
+	@Test
+	public void testInvalidReturnType(){
+		assertTrue(cache.isEmpty());
+
+		assertEquals(TestHelper.INVALID_RETURN_MESSAGE, helper.invalidReturnType("FAKEKEY"));
+
+		assertTrue(cache.isEmpty());
+	}
+
+	/**
+	 * If any {@link Exception} occurred during the handling of a {@link FetcherMethod}, that is NOT
+	 * from the {@link FetcherMethod} itself, then caching should be
+	 * disabled and the {@link FetchMultiple} should be called directly with the full key set.
+	 */
+	@Test
+	public void testUnexpectedNonFetcherException(){
+		assertTrue(cache.isEmpty());
+
+		Map<String, Object> map = helper.cleanerThrowsException(TestHelper.KEY_BLUE, TestHelper.KEY_GREEN);
+
+		assertEquals(TestHelper.COLOR_MAP.get(TestHelper.KEY_BLUE), map.get(TestHelper.KEY_BLUE));
+		assertEquals(TestHelper.COLOR_MAP.get(TestHelper.KEY_GREEN), map.get(TestHelper.KEY_GREEN));
+		assertEquals(2, map.size());
+
+		assertTrue(cache.isEmpty());
 	}
 
 	public static class TestHelper{
@@ -138,6 +173,8 @@ public class TestCacheInterceptor_Multiple implements Module{
 		public final static String KEY_GREEN = "color-green";
 
 		public final static String PREFIX = "myprefix";
+
+		public final static String INVALID_RETURN_MESSAGE = "invalid return type";
 
 		@SuppressWarnings("serial")
 		public final static Map<String, String> COLOR_MAP = new HashMap<String, String>(){{
@@ -156,8 +193,18 @@ public class TestCacheInterceptor_Multiple implements Module{
 		}
 
 		@FetcherMethod(keyGenerator=FakeKeyGenerator.class, fetchBulk=true, keyCleaner=FakeKeyCleaner.class)
-		public String throwException(){
+		public Map<String, Object> throwException(String... keys){
 			throw new FakeRuntimeException("FAKE EXCEPTION");
+		}
+
+		@FetcherMethod(keyGenerator=FakeKeyGenerator.class, fetchBulk=true, keyCleaner=FakeKeyCleaner.class)
+		public String invalidReturnType(String... keys){
+			return INVALID_RETURN_MESSAGE;
+		}
+
+		@FetcherMethod(keyGenerator=FakeKeyGenerator.class, fetchBulk=true, keyCleaner=ExceptionThrowingKeyCleaner.class)
+		public Map<String, Object> cleanerThrowsException(String... keys){
+			return convert(keys);
 		}
 
 		private Map<String, Object> convert(String[] keys){
@@ -180,6 +227,10 @@ public class TestCacheInterceptor_Multiple implements Module{
 		@Override
 		public List<String> generateKeys(final Object[] arguments) {
 			List<String> list = new ArrayList<String>();
+			if(arguments.length <= 0){
+				return list;
+			}
+
 			Object[] args = (Object[]) arguments[0];
 			for(Object arg : args){
 				list.add(arg.toString());
@@ -194,6 +245,15 @@ public class TestCacheInterceptor_Multiple implements Module{
 		@Override
 		public void clean(final Object[] arguments, final List<String> uncachedKeys) {
 			arguments[0] = uncachedKeys.toArray(new String[0]);
+		}
+
+	}
+
+	public static class ExceptionThrowingKeyCleaner implements KeyCleaner{
+
+		@Override
+		public void clean(Object[] arguments, List<String> uncachedKeys) {
+			throw new RuntimeException("FAKE EXCEPTION");
 		}
 
 	}
