@@ -25,26 +25,34 @@ import cacher.Cache;
  */
 public class ExceptionThrowingCache implements Cache {
 
-	private static final String ERROR = "Caching not supported.";
-
 	@Override
 	public Object get(String key) {
-		throw new RuntimeException(ERROR);
+		throw new CachingNotSupported();
 	}
 
 	@Override
 	public void set(String key, Object value) {
-		throw new RuntimeException(ERROR);
+		throw new CachingNotSupported();
 	}
 
 	@Override
 	public void clear() {
-		throw new RuntimeException(ERROR);
+		throw new CachingNotSupported();
 	}
 
 	@Override
 	public Map<String, Object> getBulk(List<String> keys) {
-		throw new RuntimeException(ERROR);
+		throw new CachingNotSupported();
+	}
+
+	private static class CachingNotSupported extends RuntimeException{
+
+		private static final long serialVersionUID = 7805563875629720920L;
+
+		public CachingNotSupported(){
+			super("Caching is not supported.");
+		}
+
 	}
 
 }

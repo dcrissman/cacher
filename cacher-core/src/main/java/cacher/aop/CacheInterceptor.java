@@ -222,7 +222,7 @@ public class CacheInterceptor implements MethodInterceptor{
 	 * 
 	 * @author Dennis Crissman
 	 */
-	public static class CacheInterceptorException extends RuntimeException{
+	private static class CacheInterceptorException extends RuntimeException{
 
 		private static final long serialVersionUID = -2880937590798593384L;
 
