@@ -12,11 +12,72 @@
 
 package cacher.memcached;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.spy.memcached.MemcachedClient;
+
+import org.easymock.EasyMock;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestMemcachedCache {
+
+	private final MemcachedClient client = EasyMock.createMock(MemcachedClient.class);
+
+	@Before
+	public void init(){
+		reset(client);
+		replay(client);
+	}
+
+	@After
+	public void after(){
+		verify(client);
+	}
+
+	private MemcachedCache createCache(){
+		return createCache(1);
+	}
+
+	private MemcachedCache createCache(int timeout){
+		return new MemcachedCache(client, timeout);
+	}
+
+	@Test
+	public void testGet(){
+		String key = "my&key";
+		Object value = new Object();
+
+		reset(client);
+		expect(client.get(MemcachedCache.encode(key))).andReturn(value);
+		replay(client);
+
+		MemcachedCache cache = createCache();
+		assertEquals(value, cache.get(key));
+	}
+
+	@Test
+	public void testGetBulk(){
+		String key1 = "my&key";
+		String key2 = "my other key";
+		Map<String, Object> value = new HashMap<String, Object>();
+
+		reset(client);
+		expect(client.getBulk(Arrays.asList(MemcachedCache.encode(key1), MemcachedCache.encode(key2)))).andReturn(value);
+		replay(client);
+
+		MemcachedCache cache = createCache();
+		assertEquals(value, cache.getBulk(Arrays.asList(key1, key2)));
+	}
 
 	@Test
 	public void testEncode(){

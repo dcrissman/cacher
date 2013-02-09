@@ -37,15 +37,21 @@ public class MemcachedCache implements Cache {
 	static final Character[] ESCAPABLE_CHARS = new Character[]{' '};
 
 	/**
-	 * @param host - Memcache server hostname.
-	 * @param port - Memcache server port number
-	 * @param seconds - the entry expire timeout in seconds
+	 * @param connections - list of memcached instances to connect too.
+	 * @param timeout - the entry expire timeout in seconds
 	 * @throws IOException
 	 */
-	public MemcachedCache(List<InetSocketAddress> connections, int seconds) throws IOException {
-		client = new MemcachedClient(connections);
+	public MemcachedCache(List<InetSocketAddress> connections, int timeout) throws IOException {
+		this(new MemcachedClient(connections), timeout);
+	}
 
-		cacheExpireSeconds = seconds;
+	/**
+	 * @param client - {@link MemcachedCache}
+	 * @param timeout - the entry expire timeout in seconds
+	 */
+	public MemcachedCache(MemcachedClient client, int timeout){
+		this.client = client;
+		cacheExpireSeconds = timeout;
 	}
 
 	public MemcachedClient getClient(){
