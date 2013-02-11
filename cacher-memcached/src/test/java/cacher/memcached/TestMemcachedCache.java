@@ -58,7 +58,7 @@ public class TestMemcachedCache {
 		Object value = new Object();
 
 		reset(client);
-		expect(client.get(MemcachedCache.encode(key))).andReturn(value);
+		expect(client.get(MemcachedCache.encode(key))).andReturn(value).once();
 		replay(client);
 
 		MemcachedCache cache = createCache();
@@ -72,11 +72,29 @@ public class TestMemcachedCache {
 		Map<String, Object> value = new HashMap<String, Object>();
 
 		reset(client);
-		expect(client.getBulk(Arrays.asList(MemcachedCache.encode(key1), MemcachedCache.encode(key2)))).andReturn(value);
+		expect(client.getBulk(
+				Arrays.asList(MemcachedCache.encode(key1), MemcachedCache.encode(key2)))
+				).andReturn(value).once();
 		replay(client);
 
 		MemcachedCache cache = createCache();
 		assertEquals(value, cache.getBulk(Arrays.asList(key1, key2)));
+	}
+
+	@Test
+	public void testSet(){
+		String key = "my&key";
+		Object value = new Object();
+		int timeout = 5;
+
+		reset(client);
+		expect(client.set(
+				MemcachedCache.encode(key), timeout, value)
+				).andReturn(null).once();
+		replay(client);
+
+		MemcachedCache cache = createCache(timeout);
+		cache.set(key, value);
 	}
 
 	@Test
