@@ -194,7 +194,7 @@ public class TestCacheInterceptor_Multiple implements Module{
 
 		@FetcherMethod(keyGenerator=FakeKeyGenerator.class, fetchBulk=true, keyCleaner=FakeKeyCleaner.class)
 		public Map<String, Object> throwException(String... keys){
-			throw new FakeRuntimeException("FAKE EXCEPTION");
+			throw new FakeRuntimeException();
 		}
 
 		@FetcherMethod(keyGenerator=FakeKeyGenerator.class, fetchBulk=true, keyCleaner=FakeKeyCleaner.class)
@@ -262,8 +262,8 @@ public class TestCacheInterceptor_Multiple implements Module{
 
 		private static final long serialVersionUID = -4796092545993257202L;
 
-		public FakeRuntimeException(String message){
-			super(message);
+		public FakeRuntimeException(){
+			super("FAKE EXCEPTION");
 		}
 
 	}

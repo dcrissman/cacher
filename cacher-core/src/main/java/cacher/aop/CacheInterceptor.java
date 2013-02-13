@@ -65,6 +65,8 @@ public class CacheInterceptor implements MethodInterceptor{
 
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable { //NOSONAR
+		Object[] safetyArgs = invocation.getArguments().clone();
+
 		try{
 			if(getFetchManager() == null){
 				throw new IllegalStateException("A FetchManager instance must set.");
@@ -78,12 +80,16 @@ public class CacheInterceptor implements MethodInterceptor{
 			}
 
 			KeyGenerator keyGenerator = cacheAnnotation.keyGenerator().newInstance();
+			ensureMethodInvocationOnAwareObject(keyGenerator, invocation);
 
 			if(cacheAnnotation.fetchBulk()){
+				KeyCleaner keyCleaner = cacheAnnotation.keyCleaner().newInstance();
+				ensureMethodInvocationOnAwareObject(keyCleaner, invocation);
+
 				return getFetchManager().fetchMultiple(
 						cacheAnnotation.prefix(),
 						keyGenerator.generateKeys(invocation.getArguments()),
-						new MultipleFetcher(invocation, cacheAnnotation.keyCleaner().newInstance()));
+						new MultipleFetcher(invocation, keyCleaner));
 			}
 			else{
 				return getFetchManager().fetchSingle(
@@ -103,7 +109,29 @@ public class CacheInterceptor implements MethodInterceptor{
 			 */
 			LOGGER.info("An unexpected exception was thrown while attempting to cache '" + invocation.getMethod().getName()
 					+ "'. Method will now be invoked without caching enabled.", e);
+
+			/*
+			 * This is an attempt to restore the arguments to their original values
+			 * should any changes have occurred during the interception. The idea being
+			 * that if we are aborting the cache, then we want the FetchMethod to retrieve
+			 * all values.
+			 */
+			for(int x = 0; x < safetyArgs.length; x++){
+				invocation.getArguments()[x] = safetyArgs[x];
+			}
+
 			return invocation.proceed();
+		}
+	}
+
+	/**
+	 * Ensures that the {@link MethodInvocation} is populated on any {@link MethodInvocationAware} classes.
+	 * @param obj - Object to be checked
+	 * @param invocation - {@link MethodInvocation}
+	 */
+	private void ensureMethodInvocationOnAwareObject(Object obj, MethodInvocation invocation){
+		if(obj instanceof MethodInvocationAware){
+			((MethodInvocationAware)obj).setMethodInvocation(invocation);
 		}
 	}
 
@@ -121,13 +149,13 @@ public class CacheInterceptor implements MethodInterceptor{
 		}
 
 		@Override
-		public Object fetch(String key) {
+		public Object fetch(String uncachedKey) {
 			try {
 				return invocation.proceed();
 			}
 			catch (Throwable e) { //NOSONAR
 				throw new AopFetcherInvocationException(
-						"Unable to fetch key for method " + invocation.getMethod().toString() + ": " + key, e);
+						"Unable to fetch key for method " + invocation.getMethod().toString() + ": " + uncachedKey, e);
 			}
 		}
 
@@ -155,9 +183,9 @@ public class CacheInterceptor implements MethodInterceptor{
 		}
 
 		@Override
-		public Map<String, Object> fetch(List<String> keys) {
+		public Map<String, Object> fetch(List<String> uncachedKeys) {
 			try {
-				cleaner.clean(invocation.getArguments(), keys);
+				cleaner.clean(invocation.getArguments(), uncachedKeys);
 
 				Object obj;
 				try{
@@ -165,7 +193,7 @@ public class CacheInterceptor implements MethodInterceptor{
 				}
 				catch(Throwable e){ //NOSONAR
 					throw new AopFetcherInvocationException(
-							"Unable to fetch keys for method " + invocation.getMethod().toString() + ": " + keys, e);
+							"Unable to fetch keys for method " + invocation.getMethod().toString() + ": " + uncachedKeys, e);
 				}
 
 				if(obj instanceof Map){
@@ -190,7 +218,7 @@ public class CacheInterceptor implements MethodInterceptor{
 			}
 			catch (Exception e) {
 				throw new CacheInterceptorException(
-						"Unable to fetch keys for method " + invocation.getMethod().toString() + ": " + keys, e);
+						"Unable to fetch keys for method " + invocation.getMethod().toString() + ": " + uncachedKeys, e);
 			}
 		}
 

@@ -17,6 +17,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.List;
 
 /**
  * <p>The annotated method will be intercepted by the {@link CacheInterceptor} and the returned value(s) will be
@@ -74,6 +75,21 @@ public @interface FetcherMethod {
 	 * remove keys that were already fetched from the {@link cacher.Cache}.</p>
 	 * <p><b>NOTE:</b> Required and used only for bulk fetches.</p>
 	 */
-	Class<? extends KeyCleaner> keyCleaner() default UnsupportedKeyCleaner.class;
+	Class<? extends KeyCleaner> keyCleaner() default DefaultKeyCleaner.class;
+
+	/**
+	 * Default value used in {@link FetcherMethod#keyCleaner()} if no other value is provided.
+	 * 
+	 * @author Dennis Crissman
+	 *
+	 */
+	static class DefaultKeyCleaner implements KeyCleaner{
+
+		@Override
+		public void clean(Object[] arguments, List<String> uncachedKeys) {
+			throw new UnsupportedOperationException("An implementation of KeyCleaner must be provided for Bulk fetches.");
+		}
+
+	}
 
 }
