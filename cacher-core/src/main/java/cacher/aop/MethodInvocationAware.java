@@ -14,8 +14,18 @@ package cacher.aop;
 
 import org.aopalliance.intercept.MethodInvocation;
 
+/**
+ * Applicable to {@link KeyGenerator} or {@link KeyCleaner} implementations that need to know about
+ * the {@link MethodInvocation}.
+ * 
+ * @author Dennis Crissman
+ */
 public interface MethodInvocationAware {
 
+	/**
+	 * Sets the {@link MethodInvocation}
+	 * @param invocation - {@link MethodInvocation}
+	 */
 	void setMethodInvocation(MethodInvocation invocation);
 
 }

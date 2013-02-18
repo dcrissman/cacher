@@ -60,11 +60,18 @@ public class TestCacheInterceptor_Multiple_WithKeyCleaner implements Module{
 		cache.clear();
 	}
 
+	/**
+	 * Asserts that the key cleaner can in fact change method argument values
+	 */
 	@Test
 	public void testValueChangingKeyCleaner(){
 		assertEquals(ValueChangingKeyCleaner.NEW_VALUE, helper.changeValue("whatever").get(TestHelper.HELPER_KEY1));
 	}
 
+	/**
+	 * Asserts that if the key cleaner changes a argument value, but then an exception is thrown, that there is at least
+	 * some level of ability to get the unaltered method arguments back.
+	 */
 	@Test
 	public void testTroubleMakingKeyCleaner(){
 		String value = "whatever";

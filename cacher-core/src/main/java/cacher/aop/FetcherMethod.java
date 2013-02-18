@@ -23,12 +23,13 @@ import java.util.List;
  * <p>The annotated method will be intercepted by the {@link CacheInterceptor} and the returned value(s) will be
  * cached. Or in the case that all values are already cached, the {@link FetcherMethod} will never actually be called.</p>
  * 
- * <p>This annotation can be used two ways:</p>
+ * <p>This annotation can be used two ways. <b>In either case,
+ * it is strongly recommended to keep the method signature as simple as possible.</b></p>
  * 
- * <p>In the first case, things are pretty straight forward, the returned value is cached exactly as it is.<br>
+ * <p>1. In the first case, things are pretty straight forward, the returned value is cached exactly as it is.<br>
  * Only a {@link KeyGenerator} is required.</p>
  * 
- * <p>The second case (aka. Bulk Fetch) is more complicated. The idea is that a collection of keys is somehow passed
+ * <p>2. The second case (aka. Bulk Fetch) is more complicated. The idea is that a collection of keys is somehow passed
  * into the {@link FetcherMethod} and easy will be individually cached. It is then possible to have some key/values
  * already cached, and others not. <br>
  * {@link KeyGenerator}, {@link KeyCleaner} and fetchBulk = true are all required for this strategy.</p>

@@ -28,8 +28,12 @@ import java.util.List;
 public interface KeyCleaner {
 
 	/**
-	 * Tells the {@link CacheInterceptor} how to remove keys that were already cached so that the fetching method
-	 * can only retrieve values that are yet to be cached.
+	 * <p>Tells the {@link CacheInterceptor} how to remove keys that were already cached so that the fetching method
+	 * can only retrieve values that are yet to be cached.</p>
+	 * <p><b>NOTE:</b> When changing argument values, it is best to use a new Object instance, rather than alter the existing.
+	 * This is because if a <code>Exception</code> is thrown during aop execution, a argument rollback will be attempted. However in order
+	 * to preserve the original argument values a shallow clone is used. This means that while the array itself is a clone, the values within
+	 * are the same. So by changing the values in an existing Object, you actually change that value in the clone (aka backup) as well.</p>
 	 * @param arguments - Arguments as they were passed into the {@link FetcherMethod} before interception.
 	 * @param uncachedKeys - List of keys that need to be fetched
 	 */
