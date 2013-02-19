@@ -32,6 +32,10 @@ public class InMemoryCache extends HashMap<String, Object> implements Cache {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryCache.class);
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#get(java.lang.String)
+	 */
 	@Override
 	public Object get(String key) {
 		Object value = super.get(key);
@@ -39,18 +43,30 @@ public class InMemoryCache extends HashMap<String, Object> implements Cache {
 		return value;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#set(java.lang.String, java.lang.Object)
+	 */
 	@Override
 	public void set(String key, Object value) {
 		LOGGER.info("set: " + key + ", " + ((value == null) ? "null" : value.toString()));
 		super.put(key, value);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.util.HashMap#clear()
+	 */
 	@Override
 	public void clear() {
 		LOGGER.debug("clear");
 		super.clear();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#getBulk(java.util.List)
+	 */
 	@Override
 	public Map<String, Object> getBulk(List<String> keys) {
 		Map<String, Object> values = new HashMap<String, Object>();

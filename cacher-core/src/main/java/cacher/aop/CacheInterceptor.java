@@ -148,6 +148,10 @@ public class CacheInterceptor implements MethodInterceptor{
 			this.invocation = invocation;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see cacher.fetcher.FetchSingle#fetch(java.lang.String)
+		 */
 		@Override
 		public Object fetch(String uncachedKey) {
 			try {
@@ -159,6 +163,10 @@ public class CacheInterceptor implements MethodInterceptor{
 			}
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see cacher.fetcher.FetchSingle#getType()
+		 */
 		@Override
 		@SuppressWarnings("unchecked")
 		public Class<Object> getType() {
@@ -182,6 +190,10 @@ public class CacheInterceptor implements MethodInterceptor{
 			this.cleaner = cleaner;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see cacher.fetcher.FetchMultiple#fetch(java.util.List)
+		 */
 		@Override
 		public Map<String, Object> fetch(List<String> uncachedKeys) {
 			try {
@@ -222,6 +234,10 @@ public class CacheInterceptor implements MethodInterceptor{
 			}
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see cacher.fetcher.FetchMultiple#getType()
+		 */
 		@Override
 		public Class<Object> getType() {
 			return Object.class;

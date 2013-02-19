@@ -25,6 +25,10 @@ import cacher.aop.KeyCleaner;
  */
 public class SimpleCacheKeyCleaner extends CacheKeyInterpreter implements KeyCleaner {
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.aop.KeyCleaner#clean(java.lang.Object[], java.util.List)
+	 */
 	@Override
 	public void clean(final Object[] arguments, final List<String> uncachedKeys) {
 		int keyPosition = findKeyPosition();

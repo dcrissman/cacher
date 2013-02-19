@@ -23,11 +23,19 @@ import cacher.aop.KeyGenerator;
  */
 public class SimpleCacheKeyGenerator extends CacheKeyInterpreter implements KeyGenerator {
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.aop.KeyGenerator#generateKey(java.lang.Object[])
+	 */
 	@Override
 	public String generateKey(final Object[] arguments) {
 		return arguments[findKeyPosition()].toString();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.aop.KeyGenerator#generateKeys(java.lang.Object[])
+	 */
 	@Override
 	public List<String> generateKeys(final Object[] arguments) {
 		return convertToList(arguments[findKeyPosition()]);
