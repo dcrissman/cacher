@@ -17,7 +17,9 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.List;
+
+import cacher.aop.impl.simple.SimpleCacheKeyCleaner;
+import cacher.aop.impl.simple.SimpleCacheKeyGenerator;
 
 /**
  * <p>The annotated method will be intercepted by the {@link CacheInterceptor} and the returned value(s) will be
@@ -62,7 +64,7 @@ public @interface FetcherMethod {
 	/**
 	 * {@link KeyGenerator} is used to generate the keys used by the {@link cacher.Cache}.
 	 */
-	Class<? extends KeyGenerator> keyGenerator();
+	Class<? extends KeyGenerator> keyGenerator() default SimpleCacheKeyGenerator.class;
 
 	/**
 	 * <p><code>true</code> indicates that bulk fetch should be performed,
@@ -76,21 +78,6 @@ public @interface FetcherMethod {
 	 * remove keys that were already fetched from the {@link cacher.Cache}.</p>
 	 * <p><b>NOTE:</b> Required and used only for bulk fetches.</p>
 	 */
-	Class<? extends KeyCleaner> keyCleaner() default DefaultKeyCleaner.class;
-
-	/**
-	 * Default value used in {@link FetcherMethod#keyCleaner()} if no other value is provided.
-	 * 
-	 * @author Dennis Crissman
-	 *
-	 */
-	static class DefaultKeyCleaner implements KeyCleaner{
-
-		@Override
-		public void clean(Object[] arguments, List<String> uncachedKeys) {
-			throw new UnsupportedOperationException("An implementation of KeyCleaner must be provided for Bulk fetches.");
-		}
-
-	}
+	Class<? extends KeyCleaner> keyCleaner() default SimpleCacheKeyCleaner.class;
 
 }
