@@ -31,6 +31,10 @@ public class CacheKeyInterpreter implements MethodInvocationAware {
 
 	private MethodInvocation invocation;
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.aop.MethodInvocationAware#setMethodInvocation(org.aopalliance.intercept.MethodInvocation)
+	 */
 	@Override
 	public void setMethodInvocation(MethodInvocation invocation) {
 		this.invocation = invocation;
