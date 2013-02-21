@@ -12,14 +12,13 @@
 
 package cacher.aop.impl.simple;
 
-import java.util.Collection;
 import java.util.List;
 
 import cacher.aop.KeyCleaner;
 
 /**
  * <p>Uses the {@link CacheKey} annotation to identify the parameter to use as the key in the cache.</p>
- * <p>As only bulk fetches use {@link KeyCleaner}s, the annotated parameter needs to be a {@link Collection}.</p>
+ * <p>As only bulk fetches use {@link KeyCleaner}s, the annotated parameter needs to be a {@link java.util.Collection}.</p>
  * 
  * @author Dennis Crissman
  */

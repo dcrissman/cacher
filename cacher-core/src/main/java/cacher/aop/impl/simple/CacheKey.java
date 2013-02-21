@@ -17,7 +17,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Collection;
 
 /**
  * <p>Identifies the parameter to use as the key for the cache.</p>
@@ -26,7 +25,7 @@ import java.util.Collection;
  * that has had <code>#toString()</code> overridden.
  * </p>
  * <p>
- * For a bulk fetch, this parameter should be a {@link Collection} or an array. The values contained
+ * For a bulk fetch, this parameter should be a {@link java.util.Collection} or an array. The values contained
  * within should be <code>String</code>s or <code>Object</code>s
  * that has had <code>#toString()</code> overridden.
  * </p>
