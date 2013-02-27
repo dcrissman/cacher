@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>cacher</groupId>
 		<artifactId>cacher</artifactId>
-		<version>1.0.3</version>
+		<version>1.0.4</version>
 	</parent>
 
 	<artifactId>cacher-memcached</artifactId>
-	<version>1.0.3</version><!-- allow cacher-memcached to be versioned independently -->
 	<name>${project.artifactId}</name>
+	<packaging>bundle</packaging>
 
 	<licenses>
 		<license>
@@ -51,5 +51,19 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+		<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<instructions>
+						<Export-Package>cacher.memcached.*</Export-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
