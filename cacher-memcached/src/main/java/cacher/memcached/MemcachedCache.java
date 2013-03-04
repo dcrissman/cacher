@@ -30,7 +30,7 @@ import cacher.Cache;
 public class MemcachedCache implements Cache {
 
 	private final MemcachedClient client;
-	private int cacheExpireSeconds;
+	private int defaultExpireSeconds;
 
 	static final Character ESCAPE_CHAR = '&';
 	/** Any Character in this Array will be escaped in the cached key. */
@@ -47,22 +47,33 @@ public class MemcachedCache implements Cache {
 
 	/**
 	 * @param client - {@link MemcachedCache}
-	 * @param timeout - the entry expire timeout in seconds
+	 * @param expiration - the entry expire timeout in seconds
 	 */
-	public MemcachedCache(MemcachedClient client, int timeout){
+	public MemcachedCache(MemcachedClient client, int expiration){
 		this.client = client;
-		cacheExpireSeconds = timeout;
+		defaultExpireSeconds = expiration;
 	}
 
+	/**
+	 * @return the underlying {@link MemcachedCache} that is used to communicate with the memcached pool.
+	 */
 	public MemcachedClient getClient(){
 		return client;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#get(java.lang.String)
+	 */
 	@Override
 	public Object get(String key) {
 		return client.get(encode(key));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#getBulk(java.util.List)
+	 */
 	@Override
 	public Map<String, Object> getBulk(List<String> keys) {
 		List<String> encodedKeys = new ArrayList<String>();
@@ -72,31 +83,54 @@ public class MemcachedCache implements Cache {
 		return client.getBulk(encodedKeys);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#set(java.lang.String, java.lang.Object)
+	 */
 	@Override
 	public void set(String key, Object value) {
-		client.set(encode(key), getCacheExpireSeconds(), value);
+		set(key, value, getDefaultCacheExpireSeconds());
 	}
 
 	/**
-	 * Sets the entry expire timeout in seconds.
-	 * @param seconds - int
+	 * Sets a value in the cacher
+	 * @param key - String key
+	 * @param value - Object value
+	 * @param expiration - Seconds to allow the cached key/value pair to live.
 	 */
-	public void setCacheExpireSeconds(int seconds) {
-		cacheExpireSeconds = seconds;
+	public void set(String key, Object value, int expiration){
+		client.set(encode(key), expiration, value);
 	}
 
 	/**
-	 * @return seconds each entry will expire in.
+	 * Sets the default entry expire timeout in seconds. This value will be used if one is not otherwise specified.
+	 * @param seconds - default seconds to expire entries
 	 */
-	public int getCacheExpireSeconds() {
-		return cacheExpireSeconds;
+	public void setDefaultCacheExpireSeconds(int seconds) {
+		defaultExpireSeconds = seconds;
 	}
 
+	/**
+	 * @return default seconds each entry will expire in.
+	 */
+	public int getDefaultCacheExpireSeconds() {
+		return defaultExpireSeconds;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#clear()
+	 */
 	@Override
 	public void clear() {
 		client.flush();
 	}
 
+	/**
+	 * Certain characters are invalid for usage in the key, this method will scan a key for any such characters and escape them.
+	 * @param key - raw key
+	 * @return escaped key
+	 */
 	static String encode(String key){
 		String encodedKey = key.replaceAll(ESCAPE_CHAR.toString(), ESCAPE_CHAR.toString() + Integer.valueOf(ESCAPE_CHAR));
 		for(Character ch : ESCAPABLE_CHARS){
@@ -105,6 +139,11 @@ public class MemcachedCache implements Cache {
 		return encodedKey;
 	}
 
+	/**
+	 * Decodes escaped keys
+	 * @param key - encoded key
+	 * @return raw key
+	 */
 	static String decode(String key){
 		String decodedKey = key;
 		for(Character ch : ESCAPABLE_CHARS){
