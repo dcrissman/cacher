@@ -38,21 +38,21 @@
 			<groupId>cacher</groupId>
 			<artifactId>cacher-core</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>spy</groupId>
 			<artifactId>spymemcached</artifactId>
 			<version>${spymemcached.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
-		<build>
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
