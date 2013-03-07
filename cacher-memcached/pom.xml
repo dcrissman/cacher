@@ -20,6 +20,10 @@
 		</license>
 	</licenses>
 
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
 	<repositories>
 		<repository>
 			<id>spy</id>
