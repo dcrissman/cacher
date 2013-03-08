@@ -1,6 +1,7 @@
 package cacher.aop.impl.simple;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -96,11 +97,6 @@ public class TestCacheInterceptor_WithSimpleImpl implements Module{
 				map.put(key, new Object());
 			}
 			return map;
-		}
-
-		private void assertFalse(boolean contains) {
-			// TODO Auto-generated method stub
-
 		}
 
 	}

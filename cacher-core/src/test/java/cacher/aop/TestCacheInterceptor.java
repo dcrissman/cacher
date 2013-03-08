@@ -35,6 +35,7 @@ public class TestCacheInterceptor{
 		reset(invocation);
 		expect(invocation.getArguments()).andReturn(new Object[0]).once();
 		expect(invocation.getMethod()).andReturn(getClass().getMethod("testNullFetcher")).once();
+		expect(invocation.getArguments()).andReturn(new Object[0]).once();
 		expect(invocation.proceed()).andReturn(rtn).once();
 		replay(invocation);
 
@@ -53,6 +54,7 @@ public class TestCacheInterceptor{
 		reset(invocation);
 		expect(invocation.getArguments()).andReturn(new Object[0]).once();
 		expect(invocation.getMethod()).andReturn(getClass().getMethod("testMissingAnnotation")).times(2);
+		expect(invocation.getArguments()).andReturn(new Object[0]).once();
 		expect(invocation.proceed()).andReturn(rtn).once();
 		replay(invocation);
 

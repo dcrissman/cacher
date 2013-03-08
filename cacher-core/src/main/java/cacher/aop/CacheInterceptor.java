@@ -116,9 +116,7 @@ public class CacheInterceptor implements MethodInterceptor{
 			 * that if we are aborting the cache, then we want the FetchMethod to retrieve
 			 * all values.
 			 */
-			for(int x = 0; x < safetyArgs.length; x++){
-				invocation.getArguments()[x] = safetyArgs[x];
-			}
+			System.arraycopy(safetyArgs, 0, invocation.getArguments(), 0, safetyArgs.length);
 
 			return invocation.proceed();
 		}
