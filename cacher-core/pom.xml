@@ -12,6 +12,9 @@
 	<artifactId>cacher-core</artifactId>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
+	
+	<url>https://github.com/dcrissman/cacher</url>
+	<description>Provides base functionality required for any cache specific implementation.</description>
 
 	<licenses>
 		<license>

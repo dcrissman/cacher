@@ -12,6 +12,9 @@
 	<artifactId>cacher-memcached</artifactId>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
+	
+	<url>https://github.com/dcrissman/cacher</url>
+	<description>Implementation that supports the use of memcached.</description>
 
 	<licenses>
 		<license>
