@@ -117,7 +117,7 @@ public class TestCacheKeyInterpreter implements Module{
 		}
 
 		@TestMethod
-		public void singleCacheKey(String someValue, @CacheKey String key, String someOtherValue){
+		public void singleCacheKey(@OtherParamAnnotation String someValue, @CacheKey String key, String someOtherValue){
 			//Do Nothing!
 		}
 
@@ -126,6 +126,10 @@ public class TestCacheKeyInterpreter implements Module{
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.METHOD)
 	private @interface TestMethod{}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.PARAMETER)
+	private @interface OtherParamAnnotation{}
 
 	private class FakeMethodInterceptor implements MethodInterceptor{
 
