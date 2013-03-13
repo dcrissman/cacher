@@ -31,7 +31,7 @@ public class ExceptionThrowingCache implements Cache {
 	 */
 	@Override
 	public Object get(String key) {
-		throw new CachingNotSupported();
+		throw new UnsupportedOperationException("Caching is not supported.");
 	}
 
 	/*
@@ -40,7 +40,7 @@ public class ExceptionThrowingCache implements Cache {
 	 */
 	@Override
 	public void set(String key, Object value) {
-		throw new CachingNotSupported();
+		throw new UnsupportedOperationException("Caching is not supported.");
 	}
 
 	/*
@@ -49,7 +49,7 @@ public class ExceptionThrowingCache implements Cache {
 	 */
 	@Override
 	public void clear() {
-		throw new CachingNotSupported();
+		throw new UnsupportedOperationException("Caching is not supported.");
 	}
 
 	/*
@@ -58,22 +58,7 @@ public class ExceptionThrowingCache implements Cache {
 	 */
 	@Override
 	public Map<String, Object> getBulk(List<String> keys) {
-		throw new CachingNotSupported();
-	}
-
-	/**
-	 * Exception is thrown by {@link ExceptionThrowingCache} to indicate that caching is not actually supported.
-	 * 
-	 * @author Dennis Crissman
-	 */
-	public static class CachingNotSupported extends RuntimeException{
-
-		private static final long serialVersionUID = 7805563875629720920L;
-
-		public CachingNotSupported(){
-			super("Caching is not supported.");
-		}
-
+		throw new UnsupportedOperationException("Caching is not supported.");
 	}
 
 }
