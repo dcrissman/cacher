@@ -38,11 +38,11 @@ public class MemcachedCache implements Cache {
 
 	/**
 	 * @param connections - list of memcached instances to connect too.
-	 * @param timeout - the entry expire timeout in seconds
+	 * @param expiration - the entry expire timeout in seconds
 	 * @throws IOException
 	 */
-	public MemcachedCache(List<InetSocketAddress> connections, int timeout) throws IOException {
-		this(new MemcachedClient(connections), timeout);
+	public MemcachedCache(List<InetSocketAddress> connections, int expiration) throws IOException {
+		this(new MemcachedClient(connections), expiration);
 	}
 
 	/**
