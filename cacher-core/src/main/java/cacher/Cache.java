@@ -53,4 +53,6 @@ public interface Cache {
 	 */
 	void clear();
 
+	void remove(String key);
+
 }

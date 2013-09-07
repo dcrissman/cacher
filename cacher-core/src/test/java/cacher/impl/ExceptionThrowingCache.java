@@ -61,4 +61,13 @@ public class ExceptionThrowingCache implements Cache {
 		throw new UnsupportedOperationException("Caching is not supported.");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#remove(java.lang.String)
+	 */
+	@Override
+	public void remove(String key) {
+		throw new UnsupportedOperationException("Caching is not supported.");
+	}
+
 }

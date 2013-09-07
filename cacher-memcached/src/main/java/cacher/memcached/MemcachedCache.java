@@ -102,6 +102,15 @@ public class MemcachedCache implements Cache {
 		client.set(encode(key), expiration, value);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#remove(java.lang.String)
+	 */
+	@Override
+	public void remove(String key) {
+		client.delete(key);
+	}
+
 	/**
 	 * Sets the default entry expire timeout in seconds. This value will be used if one is not otherwise specified.
 	 * @param seconds - default seconds to expire entries

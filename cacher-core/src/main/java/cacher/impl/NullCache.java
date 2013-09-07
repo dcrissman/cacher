@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import cacher.Cache;
 
 /**
- * Essentially a do nothing CacheResult, but will log error messages for each method called. This is useful
+ * Essentially a do nothing Cache, but will log error messages for each method called. This is useful
  * when caching is disabled for some reason.
  * 
  * @author Dennis Crissman
@@ -32,7 +32,7 @@ public class NullCache implements Cache{
 	private static final Logger LOGGER = LoggerFactory.getLogger(NullCache.class);
 
 	private void log(){
-		LOGGER.error("Caching currently not enabled, please see earlier error for details.");
+		LOGGER.warn("Caching currently not enabled.");
 	}
 
 	/*
@@ -75,6 +75,16 @@ public class NullCache implements Cache{
 		log();
 		LOGGER.debug("getBulk: " + keys);
 		return new HashMap<String, Object>();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#remove(java.lang.String)
+	 */
+	@Override
+	public void remove(String key) {
+		log();
+		LOGGER.info("remove: " + key);
 	}
 
 }

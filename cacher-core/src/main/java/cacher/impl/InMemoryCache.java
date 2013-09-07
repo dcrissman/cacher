@@ -39,7 +39,7 @@ public class InMemoryCache extends HashMap<String, Object> implements Cache {
 	@Override
 	public Object get(String key) {
 		Object value = super.get(key);
-		LOGGER.info("get: " + key + ", return value = " + ((value == null) ? "null" : value.toString()));
+		LOGGER.debug("get: " + key + ", return value = " + ((value == null) ? "null" : value.toString()));
 		return value;
 	}
 
@@ -49,7 +49,7 @@ public class InMemoryCache extends HashMap<String, Object> implements Cache {
 	 */
 	@Override
 	public void set(String key, Object value) {
-		LOGGER.info("set: " + key + ", " + ((value == null) ? "null" : value.toString()));
+		LOGGER.debug("set: " + key + ", " + ((value == null) ? "null" : value.toString()));
 		super.put(key, value);
 	}
 
@@ -71,15 +71,25 @@ public class InMemoryCache extends HashMap<String, Object> implements Cache {
 	public Map<String, Object> getBulk(List<String> keys) {
 		Map<String, Object> values = new HashMap<String, Object>();
 
-		LOGGER.info("getBulk requested: " + keys);
+		LOGGER.debug("getBulk requested: " + keys);
 
 		for(String key : keys){
 			values.put(key, super.get(key));
 		}
 
-		LOGGER.info("getBulk: " + values);
+		LOGGER.debug("getBulk: " + values);
 
 		return values;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see cacher.Cache#remove(java.lang.String)
+	 */
+	@Override
+	public void remove(String key) {
+		LOGGER.debug("remove: " + key);
+		super.remove(key);
 	}
 
 }
