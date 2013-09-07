@@ -26,11 +26,13 @@
 	<properties>
 		<!-- Dependencies -->
 		<slf4j.version>1.7.2</slf4j.version>
+		
+		<!-- Optional Dependencies (aka. 'provided' if desired) -->
 		<aopalliance.version>1.0</aopalliance.version>
-		<guice.version>3.0</guice.version>
 		<javax.inject.version>1</javax.inject.version>
 
 		<!-- Test Dependencies -->
+		<guice.version>3.0</guice.version>
 		<junit.version>4.11</junit.version>
 		<easymock.version>3.1</easymock.version>
 	</properties>
@@ -63,22 +65,33 @@
 				<version>${slf4j.version}</version>
 			</dependency>
 
+			<!-- 
+				The AOP features are optional, and so should be provided by the
+				implementing application if desired.
+			-->
 			<dependency>
 				<groupId>aopalliance</groupId>
 				<artifactId>aopalliance</artifactId>
 				<version>${aopalliance.version}</version>
+				<scope>provided</scope>
 			</dependency>
 
 			<dependency>
 				<groupId>javax.inject</groupId>
 				<artifactId>javax.inject</artifactId>
 				<version>${javax.inject.version}</version>
+				<scope>provided</scope>
 			</dependency>
 
+			<!-- 
+				Ideally Cacher should not be bound to a particular implementation of javax.inject,
+				however for the purposes of testing Guice will be used.
+			-->
 			<dependency>
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
 				<version>${guice.version}</version>
+				<scope>test</scope>
 			</dependency>
 
 			<dependency>
