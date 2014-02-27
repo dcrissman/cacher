@@ -27,17 +27,8 @@
 		<maven>3.0</maven>
 	</prerequisites>
 
-	<repositories>
-		<repository>
-			<id>spy</id>
-			<name>Spy Repository</name>
-			<layout>default</layout>
-			<url>http://files.couchbase.com/maven2/</url>
-		</repository>
-	</repositories>
-
 	<properties>
-		<spymemcached.version>2.8.4</spymemcached.version>
+		<spymemcached.version>2.10.6</spymemcached.version>
 	</properties>
 
 	<dependencies>
@@ -47,7 +38,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>spy</groupId>
+			<groupId>net.spy</groupId>
 			<artifactId>spymemcached</artifactId>
 			<version>${spymemcached.version}</version>
 		</dependency>
