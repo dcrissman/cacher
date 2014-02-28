@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>cacher</groupId>
+		<groupId>com.github.dcrissman</groupId>
 		<artifactId>cacher</artifactId>
 		<version>1.0.5</version>
 	</parent>
@@ -26,6 +26,13 @@
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
+	
+	<developers>
+		<developer>
+			<id>dcrissman</id>
+			<name>Dennis Crissman</name>
+		</developer>
+	</developers>
 
 	<properties>
 		<spymemcached.version>2.10.6</spymemcached.version>
@@ -33,7 +40,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>cacher</groupId>
+			<groupId>com.github.dcrissman</groupId>
 			<artifactId>cacher-core</artifactId>
 		</dependency>
 
