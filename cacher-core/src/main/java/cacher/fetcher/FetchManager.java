@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cacher.Cache;
+import cacher.CacheUtils;
 
 /**
  * A wrapper around {@link cacher.Cache} that will automate fetching from the
@@ -42,19 +43,6 @@ public class FetchManager {
 	private final List<FetchEventListener> fetchEventListeners;
 
 	private final Cache cache;
-
-	/**
-	 * Returns the prefixed key value.
-	 * @param prefix - String prefix
-	 * @param key - String key
-	 * @return prefixed key
-	 */
-	public static String prefixedKey(String prefix, String key){
-		if(prefix == null){
-			return key;
-		}
-		return prefix + key;
-	}
 
 	public FetchManager(Cache cache){
 		this(cache, null);
@@ -103,7 +91,7 @@ public class FetchManager {
 		try{
 			Map<String, Object> cachedObjects = getBulkWithPrefix(group, keys);
 			for(String key : keys) {
-				Object obj = cachedObjects.get(prefixedKey(group, key));
+				Object obj = cachedObjects.get(CacheUtils.prefixedKey(group, key));
 				if(obj == null){
 					uncachedObjects.add(key);
 				}
@@ -138,7 +126,7 @@ public class FetchManager {
 			Map<String, T> missingObjects = fetcher.fetch(uncachedObjects);
 			for(Entry<String, T> entry : missingObjects.entrySet()){
 				map.put(entry.getKey(), entry.getValue());
-				addToCache(prefixedKey(group, entry.getKey()), entry.getValue());
+				addToCache(CacheUtils.prefixedKey(group, entry.getKey()), entry.getValue());
 			}
 			fireFetchedFromFetcherEvent(uncachedObjects);
 		}
@@ -149,7 +137,7 @@ public class FetchManager {
 	private Map<String, Object> getBulkWithPrefix(String prefix, List<String> keys){
 		ArrayList<String> adjustedKeys = new ArrayList<String>();
 		for(String key : keys) {
-			adjustedKeys.add(prefixedKey(prefix, key));
+			adjustedKeys.add(CacheUtils.prefixedKey(prefix, key));
 		}
 
 		return cache.getBulk(adjustedKeys);
@@ -185,7 +173,7 @@ public class FetchManager {
 		}
 		Object cachedObj = null;
 		try{
-			cachedObj = cache.get(prefixedKey(group, key));
+			cachedObj = cache.get(CacheUtils.prefixedKey(group, key));
 		}
 		catch(RuntimeException e){
 			LOGGER.error("Unable to fetch from cacher: - Group: '"
@@ -201,7 +189,7 @@ public class FetchManager {
 			 * and should be allowed to bubble up to application code.
 			 */
 			T obj = fetcher.fetch(key);
-			addToCache(prefixedKey(group, key), obj);
+			addToCache(CacheUtils.prefixedKey(group, key), obj);
 			fireFetchedFromFetcherEvent(keys);
 			return obj;
 		}

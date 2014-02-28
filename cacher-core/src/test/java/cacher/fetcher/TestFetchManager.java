@@ -37,6 +37,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cacher.Cache;
+import cacher.CacheUtils;
 
 public class TestFetchManager{
 
@@ -157,8 +158,8 @@ public class TestFetchManager{
 		replay(fetchEventListener);
 
 		Capture<Object> captureNewlyCachedObject = resetCacheForMultiple(new HashMap<String, Object>(){{
-			put(FetchManager.prefixedKey(PREFIX, key1), a1);
-			put(FetchManager.prefixedKey(PREFIX, key2), a2);
+			put(CacheUtils.prefixedKey(PREFIX, key1), a1);
+			put(CacheUtils.prefixedKey(PREFIX, key2), a2);
 		}});
 
 		Map<String, Apple> apples = manager.fetchMultiple(
@@ -213,7 +214,7 @@ public class TestFetchManager{
 		replay(fetchEventListener);
 
 		Capture<Object> captureNewlyCachedObjects = resetCacheForMultiple(new HashMap<String, Object>(){{
-			put(FetchManager.prefixedKey(PREFIX, key1), a1);
+			put(CacheUtils.prefixedKey(PREFIX, key1), a1);
 		}});
 
 		Map<String, Apple> apples = manager.fetchMultiple(
@@ -298,7 +299,7 @@ public class TestFetchManager{
 	@Test(expected = ClassCastException.class)
 	public void testMultiple_ClassCastException(){
 		final String key1 = "123";
-		final String prefixedKey1 = FetchManager.prefixedKey(PREFIX, key1);
+		final String prefixedKey1 = CacheUtils.prefixedKey(PREFIX, key1);
 
 		resetCacheForMultiple(new HashMap<String, Object>(){{
 			put(prefixedKey1, new Long(0));
@@ -563,28 +564,6 @@ public class TestFetchManager{
 
 		assertNotNull(apple);
 		assertSame(apple, a1);
-	}
-
-	@Test
-	public void testPrefixedKey(){
-		String prefix = "this";
-		String key = "that";
-
-		String prefixedKey = FetchManager.prefixedKey(prefix, key);
-
-		assertNotNull(prefixedKey);
-		assertEquals(prefix + key, prefixedKey);
-	}
-
-	@Test
-	public void testPrefixedKey_NullPrefix(){
-		String prefix = null;
-		String key = "that";
-
-		String prefixedKey = FetchManager.prefixedKey(prefix, key);
-
-		assertNotNull(prefixedKey);
-		assertEquals(key, prefixedKey);
 	}
 
 	private class Apple{}

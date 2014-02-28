@@ -22,11 +22,10 @@ import cacher.fetcher.FetchEventListener;
 import cacher.fetcher.FetchManager;
 
 /**
- * Eases integration with frameworks that supports the javax.inject api.
+ * <p>Eases integration with frameworks that supports the javax.inject api.</p>
+ * <p>Provides an instance of {@link FetchManager}.</p>
  * 
  * @author Dennis Crissman
- *
- * @param <T>
  */
 public class FetchManagerProvider implements Provider<FetchManager>{
 
