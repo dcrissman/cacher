@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import cacher.Cache;
 
 /**
- * Essentially a do nothing Cache, but will log error messages for each method called. This is useful
+ * Essentially a do nothing Cache, but will log messages for each method called. This is useful
  * when caching is disabled for some reason.
  * 
  * @author Dennis Crissman

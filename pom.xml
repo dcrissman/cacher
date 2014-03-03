@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.dcrissman</groupId>
 	<artifactId>cacher</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.6</version>
 	<packaging>pom</packaging>
 
 	<name>${project.artifactId}</name>
