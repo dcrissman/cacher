@@ -17,6 +17,10 @@
 	</organization>
 	<inceptionYear>2013</inceptionYear>
 
+	<scm>
+		<url>https://github.com/dcrissman/cacher</url>
+	</scm>
+
 	<licenses>
 		<license>
 			<name>Lesser General Public License (LGPL), v 3.0</name>

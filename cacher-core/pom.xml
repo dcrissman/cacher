@@ -12,7 +12,7 @@
 	<artifactId>cacher-core</artifactId>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
-	
+
 	<url>https://github.com/dcrissman/cacher</url>
 	<description>Provides base functionality required for any cache specific implementation.</description>
 	<organization>
@@ -20,6 +20,10 @@
 		<url>http://www.redhat.com/</url>
 	</organization>
 	<inceptionYear>2013</inceptionYear>
+
+	<scm>
+		<url>https://github.com/dcrissman/cacher</url>
+	</scm>
 
 	<licenses>
 		<license>
@@ -36,7 +40,7 @@
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
-	
+
 	<developers>
 		<developer>
 			<id>dcrissman</id>
