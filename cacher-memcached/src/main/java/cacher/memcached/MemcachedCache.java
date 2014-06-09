@@ -20,6 +20,7 @@ import java.util.Map;
 
 import net.spy.memcached.MemcachedClient;
 import cacher.Cache;
+import cacher.memcached.getstrategy.SyncGetStrategy;
 
 /**
  * Implementation of {@link Cache} that uses Memcache.
@@ -31,27 +32,58 @@ public class MemcachedCache implements Cache {
 
 	private final MemcachedClient client;
 	private int defaultExpireSeconds;
+	private final GetStrategy getStrategy;
 
 	static final Character ESCAPE_CHAR = '&';
 	/** Any Character in this Array will be escaped in the cached key. */
 	static final Character[] ESCAPABLE_CHARS = new Character[]{' '};
 
 	/**
+	 * This constructor defaults to using {@link SyncGetStrategy}.
 	 * @param connections - list of memcached instances to connect too.
 	 * @param expiration - the entry expire timeout in seconds
 	 * @throws IOException
 	 */
 	public MemcachedCache(List<InetSocketAddress> connections, int expiration) throws IOException {
-		this(new MemcachedClient(connections), expiration);
+		this(connections, null, expiration);
 	}
 
 	/**
+	 * @param connections - list of memcached instances to connect too.
+	 * @param getStrategy - {@link GetStrategy} to use when retrieving data.
+	 * @param expiration - the entry expire timeout in seconds
+	 * @throws IOException
+	 */
+	public MemcachedCache(List<InetSocketAddress> connections, GetStrategy getStrategy, int expiration) throws IOException {
+		this(new MemcachedClient(connections), getStrategy, expiration);
+	}
+
+	/**
+	 * This constructor defaults to using {@link SyncGetStrategy}.
 	 * @param client - {@link MemcachedCache}
 	 * @param expiration - the entry expire timeout in seconds
 	 */
 	public MemcachedCache(MemcachedClient client, int expiration){
+		this(client, null, expiration);
+	}
+
+	/**
+	 * @param client - {@link MemcachedCache}
+	 * @param getStrategy - {@link GetStrategy} to use when retrieving data. If null is passed in,
+	 * then {@link SyncGetStrategy} will be used.
+	 * @param expiration - the entry expire timeout in seconds
+	 */
+	public MemcachedCache(MemcachedClient client, GetStrategy getStrategy, int expiration){
 		this.client = client;
-		defaultExpireSeconds = expiration;
+
+		if(getStrategy == null){
+			this.getStrategy = new SyncGetStrategy();
+		}
+		else{
+			this.getStrategy = getStrategy;
+		}
+
+		this.defaultExpireSeconds = expiration;
 	}
 
 	/**
@@ -67,7 +99,7 @@ public class MemcachedCache implements Cache {
 	 */
 	@Override
 	public Object get(String key) {
-		return client.get(encode(key));
+		return getStrategy.get(client, encode(key));
 	}
 
 	/*
@@ -80,7 +112,7 @@ public class MemcachedCache implements Cache {
 		for(String key : keys){
 			encodedKeys.add(encode(key));
 		}
-		return client.getBulk(encodedKeys);
+		return getStrategy.getBulk(client, encodedKeys);
 	}
 
 	/*

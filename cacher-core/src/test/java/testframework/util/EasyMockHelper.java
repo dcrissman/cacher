@@ -62,8 +62,8 @@ public final class EasyMockHelper {
 
 		public MethodWithParameters(String methodName, Class<?>... parameters){
 			this();
-			setMethodName(methodName);
-			setParameters(parameters);
+			this.methodName = methodName;
+			this.parameters = parameters;
 		}
 
 		public String getMethodName() {

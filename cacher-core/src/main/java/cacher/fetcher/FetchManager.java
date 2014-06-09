@@ -90,17 +90,23 @@ public class FetchManager {
 		List<String> uncachedObjects = new ArrayList<String>();
 		try{
 			Map<String, Object> cachedObjects = getBulkWithPrefix(group, keys);
-			for(String key : keys) {
-				Object obj = cachedObjects.get(CacheUtils.prefixedKey(group, key));
-				if(obj == null){
-					uncachedObjects.add(key);
-				}
-				else {
-					assertValidType(fetcher.getType(), obj);
-					map.put(key, (T)obj);
-				}
+			if(cachedObjects == null || cachedObjects.isEmpty()){
+				//no objects were returned from the cache, they all must be fetched.
+				uncachedObjects.addAll(keys);
 			}
-			fireFetchedFromCacheEvent(new ArrayList<String>(map.keySet()));
+			else{
+				for(String key : keys) {
+					Object obj = cachedObjects.get(CacheUtils.prefixedKey(group, key));
+					if(obj == null){
+						uncachedObjects.add(key);
+					}
+					else {
+						assertValidType(fetcher.getType(), obj);
+						map.put(key, (T)obj);
+					}
+				}
+				fireFetchedFromCacheEvent(new ArrayList<String>(map.keySet()));
+			}
 		}
 		catch(ClassCastException e){ //NOSONAR
 			throw e;

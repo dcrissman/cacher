@@ -4,18 +4,28 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.dcrissman</groupId>
 	<artifactId>cacher</artifactId>
-	<version>1.0.6</version>
+	<version>1.0.7</version>
 	<packaging>pom</packaging>
 
 	<name>${project.artifactId}</name>
 
 	<url>https://github.com/dcrissman/cacher</url>
 	<description>Cacher provides a simple interface (Cache) that is designed to wrap a 3rd party caching client/library (eg. spymemcached). This interface is then consumed by the FetchManager which houses logic to standarize how cached values are stored and retrieved. If a value is already cached then it is simply returned, otherwise a Fetcher (either FetchSingle or FetchMultiple) is asked how to produce the value, which is then cached for subsequent requests.</description>
+	<organization>
+		<name>Red Hat, Inc.</name>
+		<url>http://www.redhat.com/</url>
+	</organization>
+	<inceptionYear>2013</inceptionYear>
 
 	<licenses>
 		<license>
 			<name>Lesser General Public License (LGPL), v 3.0</name>
 			<url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+			<comments>
+				In addition to the conditions of LGPLv3, you must preserve author
+				attributions in source code distributions and must accompany binary
+				distributions with such author attributions.
+			</comments>
 		</license>
 	</licenses>
 
@@ -27,6 +37,7 @@
 		<developer>
 			<id>dcrissman</id>
 			<name>Dennis Crissman</name>
+			<organization>Red Hat, Inc.</organization>
 		</developer>
 	</developers>
 
@@ -81,6 +92,7 @@
 				<artifactId>aopalliance</artifactId>
 				<version>${aopalliance.version}</version>
 				<scope>provided</scope>
+				<optional>true</optional>
 			</dependency>
 
 			<dependency>
@@ -88,6 +100,7 @@
 				<artifactId>javax.inject</artifactId>
 				<version>${javax.inject.version}</version>
 				<scope>provided</scope>
+				<optional>true</optional>
 			</dependency>
 
 			<!-- 
@@ -121,7 +134,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>3.1</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>

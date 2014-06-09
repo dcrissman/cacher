@@ -32,7 +32,7 @@ public interface Cache {
 	Object get(String key);
 
 	/**
-	 * Fetches multiple values at once.<br>
+	 * Retrieves multiple cached values at once.<br>
 	 * <br>
 	 * Depending on the implementation, getting multiple values at once may be more
 	 * efficient than each one at time.
