@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.spy.memcached.MemcachedClient;
-import cacher.memcached.GetStrategy;
 
 /**
  * {@link GetStrategy} for querying Memcache synchronously.

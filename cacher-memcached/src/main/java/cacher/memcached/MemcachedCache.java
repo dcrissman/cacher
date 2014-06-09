@@ -20,6 +20,7 @@ import java.util.Map;
 
 import net.spy.memcached.MemcachedClient;
 import cacher.Cache;
+import cacher.memcached.getstrategy.GetStrategy;
 import cacher.memcached.getstrategy.SyncGetStrategy;
 
 /**

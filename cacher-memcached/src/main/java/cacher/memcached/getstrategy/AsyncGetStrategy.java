@@ -25,8 +25,6 @@ import net.spy.memcached.internal.GetFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cacher.memcached.GetStrategy;
-
 
 /**
  * {@link GetStrategy} for querying Memcache asynchronously.
@@ -36,6 +34,8 @@ import cacher.memcached.GetStrategy;
 public class AsyncGetStrategy implements GetStrategy {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsyncGetStrategy.class);
+
+	private static final int DEFAULT_TIMEOUT_SECONDS = 5;
 
 	private int secondsToTimeout;
 
@@ -58,7 +58,7 @@ public class AsyncGetStrategy implements GetStrategy {
 	 * Defaults to waiting 5 seconds before timing out.
 	 */
 	public AsyncGetStrategy(){
-		this.secondsToTimeout = 5;
+		this.secondsToTimeout = DEFAULT_TIMEOUT_SECONDS;
 	}
 
 	/**

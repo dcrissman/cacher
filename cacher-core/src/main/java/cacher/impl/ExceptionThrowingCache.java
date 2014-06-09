@@ -25,13 +25,15 @@ import cacher.Cache;
  */
 public class ExceptionThrowingCache implements Cache {
 
+	private static final String CACHING_IS_NOT_SUPPORTED = "Caching is not supported.";
+
 	/*
 	 * (non-Javadoc)
 	 * @see cacher.Cache#get(java.lang.String)
 	 */
 	@Override
 	public Object get(String key) {
-		throw new UnsupportedOperationException("Caching is not supported.");
+		throw new UnsupportedOperationException(CACHING_IS_NOT_SUPPORTED);
 	}
 
 	/*
@@ -40,7 +42,7 @@ public class ExceptionThrowingCache implements Cache {
 	 */
 	@Override
 	public void set(String key, Object value) {
-		throw new UnsupportedOperationException("Caching is not supported.");
+		throw new UnsupportedOperationException(CACHING_IS_NOT_SUPPORTED);
 	}
 
 	/*
@@ -49,7 +51,7 @@ public class ExceptionThrowingCache implements Cache {
 	 */
 	@Override
 	public void clear() {
-		throw new UnsupportedOperationException("Caching is not supported.");
+		throw new UnsupportedOperationException(CACHING_IS_NOT_SUPPORTED);
 	}
 
 	/*
@@ -58,7 +60,7 @@ public class ExceptionThrowingCache implements Cache {
 	 */
 	@Override
 	public Map<String, Object> getBulk(List<String> keys) {
-		throw new UnsupportedOperationException("Caching is not supported.");
+		throw new UnsupportedOperationException(CACHING_IS_NOT_SUPPORTED);
 	}
 
 	/*
@@ -67,7 +69,7 @@ public class ExceptionThrowingCache implements Cache {
 	 */
 	@Override
 	public void remove(String key) {
-		throw new UnsupportedOperationException("Caching is not supported.");
+		throw new UnsupportedOperationException(CACHING_IS_NOT_SUPPORTED);
 	}
 
 }

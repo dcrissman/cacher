@@ -10,7 +10,7 @@
  * distributions with such author attributions.
  */
 
-package cacher.memcached;
+package cacher.memcached.getstrategy;
 
 import java.util.List;
 import java.util.Map;
