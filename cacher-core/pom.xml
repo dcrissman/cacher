@@ -55,14 +55,14 @@
 			<!-- Required for AOP -->
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
-			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
 			<!-- Required for AOP -->
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
-			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
