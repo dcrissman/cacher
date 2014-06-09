@@ -46,7 +46,7 @@
 	</developers>
 
 	<properties>
-		<spymemcached.version>2.10.6</spymemcached.version>
+		<spymemcached.version>2.11.3</spymemcached.version>
 	</properties>
 
 	<dependencies>
