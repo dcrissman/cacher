@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.github.dcrissman</groupId>
 		<artifactId>cacher</artifactId>
-		<version>1.0.6</version>
+		<version>1.0.7</version>
 	</parent>
 
 	<artifactId>cacher-memcached</artifactId>
@@ -15,11 +15,21 @@
 	
 	<url>https://github.com/dcrissman/cacher</url>
 	<description>Implementation that supports the use of memcached.</description>
+	<organization>
+		<name>Red Hat, Inc.</name>
+		<url>http://www.redhat.com/</url>
+	</organization>
+	<inceptionYear>2013</inceptionYear>
 
 	<licenses>
 		<license>
 			<name>Lesser General Public License (LGPL), v 3.0</name>
 			<url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+			<comments>
+				In addition to the conditions of LGPLv3, you must preserve author
+				attributions in source code distributions and must accompany binary
+				distributions with such author attributions.
+			 </comments>
 		</license>
 	</licenses>
 
@@ -31,11 +41,12 @@
 		<developer>
 			<id>dcrissman</id>
 			<name>Dennis Crissman</name>
+			<organization>Red Hat, Inc.</organization>
 		</developer>
 	</developers>
 
 	<properties>
-		<spymemcached.version>2.10.6</spymemcached.version>
+		<spymemcached.version>2.11.3</spymemcached.version>
 	</properties>
 
 	<dependencies>
