@@ -1,6 +1,7 @@
 .classpath
 .project
 .settings/
+target/
 cacher-core/test-output/
 cacher-core/target/
 cacher-memcached/target/
