@@ -131,6 +131,45 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>package</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-repository-plugin</artifactId>
+						<version>2.3.1</version>
+						<executions>
+							<execution>
+								<id>repo-bundle</id>
+								<phase>package</phase>
+								<goals>
+									<goal>bundle-create</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -165,22 +204,6 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-repository-plugin</artifactId>
-				<version>2.3.1</version>
-				<executions>
-					<execution>
-						<id>repo-bundle</id>
-						<phase>package</phase>
-						<!-- commented out for now, as it requires user input -->
-						<!-- <goals>
-							<goal>bundle-create</goal>
-						</goals> -->
 					</execution>
 				</executions>
 			</plugin>
