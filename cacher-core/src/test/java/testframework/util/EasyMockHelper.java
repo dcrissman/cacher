@@ -6,8 +6,7 @@
  * any later version.
  *
  * In addition to the conditions of LGPLv3, you must preserve author
- * attributions in source code distributions and must accompany binary
- * distributions with such author attributions.
+ * attributions in source code distributions.
  */
 
 package testframework.util;

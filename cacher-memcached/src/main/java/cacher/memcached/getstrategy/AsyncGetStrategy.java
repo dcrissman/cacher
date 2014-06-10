@@ -6,8 +6,7 @@
  * any later version.
  *
  * In addition to the conditions of LGPLv3, you must preserve author
- * attributions in source code distributions and must accompany binary
- * distributions with such author attributions.
+ * attributions in source code distributions.
  */
 
 package cacher.memcached.getstrategy;
@@ -29,7 +28,9 @@ import org.slf4j.LoggerFactory;
 /**
  * {@link GetStrategy} for querying Memcache asynchronously.
  * 
+ * @since 1.0.7
  * @author Dennis Crissman
+ * @see SyncGetStrategy
  */
 public class AsyncGetStrategy implements GetStrategy {
 

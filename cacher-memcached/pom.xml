@@ -23,6 +23,8 @@
 
 	<scm>
 		<url>https://github.com/dcrissman/cacher</url>
+		<connection>scm:git:https://github.com/dcrissman/cacher.git</connection>
+		<tag>master</tag>
 	</scm>
 
 	<licenses>
@@ -31,8 +33,7 @@
 			<url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
 			<comments>
 				In addition to the conditions of LGPLv3, you must preserve author
-				attributions in source code distributions and must accompany binary
-				distributions with such author attributions.
+				attributions in source code distributions.
 			 </comments>
 		</license>
 	</licenses>

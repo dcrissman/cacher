@@ -19,6 +19,8 @@
 
 	<scm>
 		<url>https://github.com/dcrissman/cacher</url>
+		<connection>scm:git:https://github.com/dcrissman/cacher.git</connection>
+		<tag>master</tag>
 	</scm>
 
 	<licenses>
@@ -27,8 +29,7 @@
 			<url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
 			<comments>
 				In addition to the conditions of LGPLv3, you must preserve author
-				attributions in source code distributions and must accompany binary
-				distributions with such author attributions.
+				attributions in source code distributions.
 			</comments>
 		</license>
 	</licenses>
@@ -36,7 +37,7 @@
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
-	
+
 	<developers>
 		<developer>
 			<id>dcrissman</id>
@@ -48,7 +49,7 @@
 	<properties>
 		<!-- Dependencies -->
 		<slf4j.version>1.7.7</slf4j.version>
-		
+
 		<!-- Optional Dependencies (aka. 'provided' if desired) -->
 		<aopalliance.version>1.0</aopalliance.version>
 		<javax.inject.version>1</javax.inject.version>
@@ -87,10 +88,8 @@
 				<version>${slf4j.version}</version>
 			</dependency>
 
-			<!-- 
-				The AOP features are optional, and so should be provided by the
-				implementing application if desired.
-			-->
+			<!-- The AOP features are optional, and so should be provided by the implementing 
+				application if desired. -->
 			<dependency>
 				<groupId>aopalliance</groupId>
 				<artifactId>aopalliance</artifactId>
@@ -107,10 +106,8 @@
 				<optional>true</optional>
 			</dependency>
 
-			<!-- 
-				Ideally Cacher should not be bound to a particular implementation of javax.inject,
-				however for the purposes of testing Guice will be used.
-			-->
+			<!-- Ideally Cacher should not be bound to a particular implementation 
+				of javax.inject, however for the purposes of testing Guice will be used. -->
 			<dependency>
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
@@ -154,6 +151,36 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadoc</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-repository-plugin</artifactId>
+				<version>2.3.1</version>
+				<executions>
+					<execution>
+						<id>repo-bundle</id>
+						<phase>package</phase>
+						<!-- commented out for now, as it requires user input -->
+						<!-- <goals>
+							<goal>bundle-create</goal>
+						</goals> -->
 					</execution>
 				</executions>
 			</plugin>
