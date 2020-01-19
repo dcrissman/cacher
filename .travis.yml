@@ -1,6 +1,9 @@
 language: java
 sudo: false
 
+jdk:
+    - oraclejdk9
+
 after_success:
     - mvn -B cobertura:cobertura coveralls:report
     
