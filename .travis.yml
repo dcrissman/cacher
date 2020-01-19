@@ -1,2 +1,6 @@
 language: java
 sudo: false
+
+after_success:
+    - mvn -B cobertura:cobertura coveralls:report
+    
