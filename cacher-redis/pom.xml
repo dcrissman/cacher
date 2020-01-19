@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.dcrissman</groupId>
+        <artifactId>cacher</artifactId>
+        <version>1.0.7</version>
+    </parent>
+
+    <artifactId>cacher-redis</artifactId>
+    <name>${project.artifactId}</name>
+    <packaging>bundle</packaging>
+
+    <url>https://github.com/dcrissman/cacher</url>
+    <description>Implementation that supports the use of redis.</description>
+    <organization>
+        <name>Red Hat, Inc.</name>
+        <url>http://www.redhat.com/</url>
+    </organization>
+    <inceptionYear>2020</inceptionYear>
+
+    <scm>
+        <url>https://github.com/dcrissman/cacher</url>
+        <connection>scm:git:https://github.com/dcrissman/cacher.git</connection>
+        <tag>master</tag>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>Lesser General Public License (LGPL), v 3.0</name>
+            <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+            <comments>
+                In addition to the conditions of LGPLv3, you must preserve author
+                attributions in source code distributions.
+             </comments>
+        </license>
+    </licenses>
+
+    <prerequisites>
+        <maven>3.0</maven>
+    </prerequisites>
+
+    <developers>
+        <developer>
+            <id>dcrissman</id>
+            <name>Dennis Crissman</name>
+            <organization>Red Hat, Inc.</organization>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.dcrissman</groupId>
+            <artifactId>cacher-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
+        <!-- Test Dependencies -->
+        <dependency>
+            <groupId>it.ozimov</groupId>
+            <artifactId>embedded-redis</artifactId>
+            <version>0.7.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>cacher.redis.*</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
