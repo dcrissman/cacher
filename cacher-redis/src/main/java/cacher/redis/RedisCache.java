@@ -1,7 +1,9 @@
 package cacher.redis;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +28,13 @@ public class RedisCache implements Cache {
 
     @Override
     public Map<String, Object> getBulk(List<String> keys) {
-        // TODO Auto-generated method stub
-        return null;
+        Map<String, Object> results = new HashMap<>();
+        
+        for (String key : keys) {
+            results.put(key, get(key));
+        }
+        
+        return results;
     }
 
     @Override
