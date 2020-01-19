@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dcrissman/cacher?branch=master)](https://travis-ci.org/dcrissman/cacher)
+[![Build Status](https://travis-ci.org/dcrissman/cacher.svg?branch=master)](https://travis-ci.org/dcrissman/cacher)] [![Coverage Status](https://coveralls.io/repos/dcrissman/cacher/badge.png)](https://coveralls.io/r/dcrissman/cacher)
 
 Cacher
 ------
